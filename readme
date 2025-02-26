@@ -1,103 +1,104 @@
-# Indexador de Livros para Biblioteca Digital
+# 📚 Indexador de Livros para Biblioteca Digital
 
 Este script Python automatiza a indexação de livros de uma biblioteca digital armazenada localmente em um banco de dados MySQL. Ele percorre recursivamente uma pasta raiz, identifica arquivos de livros com extensões suportadas (PDF, EPUB, AZW) e armazena informações relevantes no banco de dados.
 
-## Funcionalidades
+## ✨ Funcionalidades
 
-*   **Indexação Automática:** Escaneia uma pasta especificada e suas subpastas em busca de arquivos de livros.
-*   **Suporte a Múltiplos Formatos:** Reconhece arquivos nos formatos PDF, EPUB e AZW.
-*   **Registro em Banco de Dados:** Armazena informações como título (nome do arquivo), área (caminho relativo da pasta), e caminho completo do arquivo em um banco de dados MySQL.
-*   **Evita Duplicatas:** Verifica se um livro já foi indexado antes de adicioná-lo ao banco de dados.
-*   **Organização por Área:** Preserva a estrutura de diretórios da biblioteca, registrando a hierarquia das pastas como a "área" do livro.
+- **Indexação Automática:** Escaneia uma pasta especificada e suas subpastas em busca de arquivos de livros.
+- **Suporte a Múltiplos Formatos:** Reconhece arquivos nos formatos PDF, EPUB e AZW.
+- **Registro em Banco de Dados:** Armazena informações como título (nome do arquivo), área (caminho relativo da pasta) e caminho completo do arquivo.
+- **Evita Duplicatas:** Verifica se um livro já foi indexado antes de adicioná-lo ao banco de dados.
+- **Organização por Área:** Preserva a estrutura de diretórios da biblioteca, registrando a hierarquia das pastas como a "área" do livro.
 
+## 🛠️ Pré-requisitos
 
-## Pré-requisitos
+- **Python 3.6+**
+- **MySQL Server** configurado e acessível
+- **Pasta da Biblioteca** contendo os arquivos de livros (PDF, EPUB, AZW)
 
-*   **Python 3.6+:** Certifique-se de ter o Python instalado.
-*   **Banco de Dados MySQL:** Um servidor MySQL deve estar configurado e acessível.
-*   **Pasta da Biblioteca:** Uma pasta contendo os arquivos de livros (PDF, EPUB, AZW).  O script assume que você já possui uma pasta organizada com seus livros.
+## 🚀 Instalação
 
-## Instalação
+1. **Clone o Repositório:**
 
-1.  **Clone o Repositório:**
+```bash
+git clone <URL_DO_REPOSITORIO>
+cd <NOME_DO_REPOSITORIO>
+```
 
-    ```bash
-    git clone <URL_DO_REPOSITORIO>
-    cd <NOME_DO_REPOSITORIO>
-    ```
+2. **Criar um Ambiente Virtual (Opcional, mas recomendado):**
 
-2.  **Criar um Ambiente Virtual (Opcional, mas recomendado):**
+```bash
+python3 -m venv venv
+source venv/bin/activate  # Linux/macOS
+.\venv\Scripts\activate  # Windows
+```
 
-    ```bash
-    python3 -m venv venv
-    source venv/bin/activate  # No Linux/macOS
-    .\venv\Scripts\activate  # No Windows
-    ```
+3. **Instalar as Dependências:**
 
-3.  **Instalar as Dependências:**
+```bash
+pip install mysql-connector-python python-dotenv
+```
 
-    ```bash
-    pip install mysql-connector-python python-dotenv
-    ```
+## ⚙️ Configuração
 
-## Configuração
+1. **Definir Variáveis de Ambiente:**
 
-1.  **Definir Variáveis de Ambiente:**
+Crie um arquivo `.env` na raiz do projeto com as seguintes variáveis:
 
-    Crie um arquivo `.env` na raiz do projeto com as seguintes variáveis de ambiente (substitua com suas informações):
+```env
+HOST=seu_host_mysql
+USER=seu_usuario_mysql
+PASSWORD=sua_senha_mysql
+DATABASE=seu_banco_de_dados_mysql
+```
 
-    ```
-    HOST=seu_host_mysql
-    USER=seu_usuario_mysql
-    PASSWORD=sua_senha_mysql
-    DATABASE=seu_banco_de_dados_mysql
-    ```
+2. **Definir o Caminho da Biblioteca:**
 
-   
+Edite a variável `pasta_biblioteca` no script `indexador.py`:
 
-2.  **Definir o Caminho da Biblioteca:**
+```python
+pasta_biblioteca = r'E:\BIBLIOTECA'
+```
 
-    Edite a linha `pasta_biblioteca = r'E:\BIBLIOTECA'` no script `indexador.py` (ou o nome que você deu ao arquivo) para apontar para o caminho correto da sua pasta de livros. Substitua `E:\BIBLIOTECA` pelo caminho real.  Use caminhos absolutos.
+Use caminhos absolutos para evitar problemas.
 
-## Execução
+## ▶️ Execução
 
-1.  **Execute o Script:**
+```bash
+python indexador.py
+```
 
-    ```bash
-    python indexador.py
-    ```
+O script percorrerá a pasta da biblioteca, indexará os livros e armazenará as informações no banco de dados.
 
-    Isso irá percorrer a pasta da biblioteca, indexar os livros e armazenar as informações no banco de dados MySQL.
+## 📂 Estrutura do Banco de Dados
 
-## Bibliotecas Necessárias
-
-*   **`mysql-connector-python`:** Para conectar e interagir com o banco de dados MySQL.  Instale com `pip install mysql-connector-python`.
-*   **`python-dotenv`:** Para carregar variáveis de ambiente a partir do arquivo `.env`.  Instale com `pip install python-dotenv`.
-
-## Estrutura do Banco de Dados
-
-O script cria uma tabela chamada `livros` no banco de dados especificado. A estrutura da tabela é a seguinte:
+O script cria uma tabela chamada `livros` com a seguinte estrutura:
 
 | Coluna        | Tipo          | Descrição                                                                 |
 | ------------- | ------------- | -------------------------------------------------------------------------- |
-| id            | INT           | Identificador único do livro (chave primária, auto incremento)               |
-| titulo        | VARCHAR(255)  | Título do livro (nome do arquivo)                                           |
-| area          | VARCHAR(255)  | Caminho relativo da pasta do livro dentro da pasta raiz da biblioteca     |
-| caminho       | TEXT          | Caminho completo do arquivo do livro no sistema de arquivos                 |
-| autor         | VARCHAR(255)  | (Atualmente não implementado)                                             |
-| editora       | VARCHAR(255)  | (Atualmente não implementado)                                             |
-| ano           | INT           | (Atualmente não implementado)                                             |
-| paginas       | INT           | (Atualmente não implementado)                                             |
-| genero        | VARCHAR(255)  | (Atualmente não implementado)                                             |
-| idioma        | VARCHAR(255)  | (Atualmente não implementado)                                             |
-| sinopse       | TEXT          | (Atualmente não implementado)                                             |
-| capa          | BLOB          | (Atualmente não implementado)                                             |
-| data_adicao   | TIMESTAMP     | Data e hora em que o livro foi adicionado ao banco de dados (automático) |
+| `id`          | INT           | Identificador único do livro (chave primária, auto incremento)              |
+| `titulo`      | VARCHAR(255)  | Título do livro (nome do arquivo)                                           |
+| `area`        | VARCHAR(255)  | Caminho relativo da pasta do livro dentro da biblioteca                    |
+| `caminho`     | TEXT          | Caminho completo do arquivo no sistema de arquivos                         |
+| `autor`       | VARCHAR(255)  | (Atualmente não implementado)                                              |
+| `editora`     | VARCHAR(255)  | (Atualmente não implementado)                                              |
+| `ano`         | INT           | (Atualmente não implementado)                                              |
+| `paginas`     | INT           | (Atualmente não implementado)                                              |
+| `genero`      | VARCHAR(255)  | (Atualmente não implementado)                                              |
+| `idioma`      | VARCHAR(255)  | (Atualmente não implementado)                                              |
+| `sinopse`     | TEXT          | (Atualmente não implementado)                                              |
+| `capa`        | BLOB          | (Atualmente não implementado)                                              |
+| `data_adicao` | TIMESTAMP     | Data e hora de adição ao banco (preenchido automaticamente)                |
 
-**Observação:** As colunas `autor`, `editora`, `ano`, `paginas`, `genero`, `idioma`, `sinopse` e `capa` estão presentes na estrutura da tabela, mas o script atual não preenche esses campos.  Implementações futuras podem extrair metadados dos arquivos dos livros para preencher esses campos.
+> ⚠️ **Nota:** As colunas não implementadas podem ser preenchidas em versões futuras com a extração de metadados dos arquivos.
+
+## 🛡️ Licença
+
+[Escolha uma licença, por exemplo: MIT License](https://opensource.org/licenses/MIT)
+
+---
+
+Feito com ❤️ para facilitar a organização de bibliotecas digitais! 🚀
 
 
-## Licença
-
-[Coloque aqui o tipo de licença, por exemplo: MIT License]
 
